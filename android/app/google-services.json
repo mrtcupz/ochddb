@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "567189229693",
+    "project_id": "ochd-8277d",
+    "storage_bucket": "ochd-8277d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:567189229693:android:84e3e03de03026f39ae114",
+        "android_client_info": {
+          "package_name": "com.ochd.ochdappupdated"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "567189229693-e1qcc3k60v2c22cmognu4r78fn070uog.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBofQV91AUL_w7ohynTx5YAoPYU-whn6sc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "567189229693-e1qcc3k60v2c22cmognu4r78fn070uog.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
