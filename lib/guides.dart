@@ -231,9 +231,9 @@ class _guidesState extends State<guides> {
                     });
 
               }
-              return Expanded(
-               // height: MediaQuery.of(context).size.height / 1.3,
-                child: const Center(
+              return SizedBox(
+                height: MediaQuery.of(context).size.height / 1.3,
+                child: Center(
                   child: CircularProgressIndicator(),
                 ),
               );

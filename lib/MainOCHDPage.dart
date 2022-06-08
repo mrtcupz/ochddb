@@ -52,6 +52,7 @@ class  _MainOCHDPagestate extends State<MainOCHDPage> {
   // TODO: Add _isBannerAdReady
   bool _isBannerAdReady = false;
 
+
   @override
   void initState() {
   _bannerAd = BannerAd(
@@ -100,7 +101,17 @@ class  _MainOCHDPagestate extends State<MainOCHDPage> {
           ),
 
            actions: [
-
+             IconButton(
+                 icon: Icon(Database().responsedarkorlight() == ThemeMode.light
+                     ? Icons.dark_mode
+                     : Icons.light_mode),
+                 color: Database().responsedarkorlight() == ThemeMode.light ? Colors.lightBlue: Colors.lightBlue,
+                 onPressed: () {
+                //   if ()
+               //    var themen MyApp.of(context)= ThemeMode.light
+                   //    ? ThemeMode.dark
+                  //     : ThemeMode.light;
+                 }),
         Switch(
           value: isSwitched,
           onChanged: (value) {
@@ -111,17 +122,17 @@ class  _MainOCHDPagestate extends State<MainOCHDPage> {
               print("value here");
               print(value);
               if (isSwitched == true) {
-                MyApp.of(context)?.changeTheme(ThemeMode.dark);
+               // MyApp.of(context)?.changeTheme(ThemeMode.dark);
                 ThemeModeHandler.of(context)?.saveThemeMode(ThemeMode.dark);
-                print(ThemeModeHandler
-                    .of(context)
-                    ?.themeMode);
+             //   print(ThemeModeHandler
+              //      .of(context)
+              //      ?.themeMode);
                 Database().darkorlight(value);
                 print("database below");
                 print(Database().responsedarkorlight());
               }
               else {
-                MyApp.of(context)?.changeTheme(ThemeMode.light);
+               // MyApp.of(context)?.changeTheme(ThemeMode.light);
                 ThemeModeHandler.of(context)?.saveThemeMode(ThemeMode.light);
                 print("database below");
 
@@ -130,6 +141,11 @@ class  _MainOCHDPagestate extends State<MainOCHDPage> {
               }
             });
           },
+         // activeThumbImage: AssetImage(
+             //  Icons.dark_mode
+        //     ),
+
+          inactiveThumbImage: new NetworkImage('http://wolfrosch.com/_img/works/goodies/icon/vim@2x'),
           activeTrackColor: Colors.lightGreenAccent,
           activeColor: Colors.green,
         ),

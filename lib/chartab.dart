@@ -357,7 +357,7 @@ class _ChartabState extends State<Chartab> with TickerProviderStateMixin {
                 itemBuilder: (context, u) {
 
                   return Card(
-                    color: u.method =="Limited Gacha" ? Colors.yellow: null,
+                    color: u.method =="Limited Gacha" ? Colors.lightBlue: null,
                     child: ListTile(
                       contentPadding:
                       const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -408,7 +408,7 @@ class _ChartabState extends State<Chartab> with TickerProviderStateMixin {
                             }
                             return Card(
                               color: i.method == 'Limited Gacha'
-                                  ? Colors.yellow
+                                  ? Colors.lightBlue
                                   : null,
 
                               child: ListTile(
