@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:ochdappupdated/chartab.dart';
 import 'package:ochdappupdated/models/Titleseries.dart';
 import 'package:provider/provider.dart';
+import 'package:theme_mode_handler/theme_mode_handler.dart';
 import 'Database.dart';
 import 'LegendTAB.dart';
 import 'LogProvider.dart';
@@ -60,6 +61,7 @@ class _YourBottomSheetWidgetLegendState extends State<YourBottomSheetWidgetLegen
   List _selectedclass = [];
   List _selectedgrade = [];
   List _selectedtype = [];
+  bool mode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -157,10 +159,19 @@ class _YourBottomSheetWidgetLegendState extends State<YourBottomSheetWidgetLegen
     });
   }
   Widget _titleContainer(String myTitle) {
+    if(ThemeModeHandler.of(context)?.themeMode == ThemeMode.light){
+      mode = false;
+    }
+    else if(ThemeModeHandler.of(context)?.themeMode == ThemeMode.dark){
+      mode = true;
+    }
     return Text(
       myTitle,
-      style: const TextStyle(
-          color: Colors.black, fontSize: 24.0, fontWeight: FontWeight.bold),
+      style: TextStyle(
+          color: mode == false
+              ? Colors.black
+              : mode == true
+              ? Colors.blue:Colors.blue, fontSize: 24.0, fontWeight: FontWeight.bold),
     );
   }
 

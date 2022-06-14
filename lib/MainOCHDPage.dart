@@ -51,6 +51,7 @@ class  _MainOCHDPagestate extends State<MainOCHDPage> {
 
   // TODO: Add _isBannerAdReady
   bool _isBannerAdReady = false;
+  bool toggle = Database().responsedarkorlight()?? false;
 
 
   @override
@@ -102,53 +103,43 @@ class  _MainOCHDPagestate extends State<MainOCHDPage> {
 
            actions: [
              IconButton(
-                 icon: Icon(Database().responsedarkorlight() == ThemeMode.light
-                     ? Icons.dark_mode
-                     : Icons.light_mode),
+                 icon: toggle
+                     ? Icon(Icons.light_mode)
+                     : Icon(
+                   Icons.dark_mode,
+                 ),
                  color: Database().responsedarkorlight() == ThemeMode.light ? Colors.lightBlue: Colors.lightBlue,
                  onPressed: () {
+                   setState(() {
+
+                     toggle = !toggle;
+
+                   isSwitched = !isSwitched;
+                   if (isSwitched == true) {
+                     // MyApp.of(context)?.changeTheme(ThemeMode.dark);
+                     ThemeModeHandler.of(context)?.saveThemeMode(ThemeMode.dark);
+                     //   print(ThemeModeHandler
+                     //      .of(context)
+                     //      ?.themeMode);
+                     Database().darkorlight(true);
+                     print("database below");
+                     print(Database().responsedarkorlight());
+                   }
+                   else {
+                     // MyApp.of(context)?.changeTheme(ThemeMode.light);
+                     ThemeModeHandler.of(context)?.saveThemeMode(ThemeMode.light);
+                     print("database below");
+
+                     Database().darkorlight(false);
+                     print(Database().responsedarkorlight());
+                   }
+                   });
                 //   if ()
                //    var themen MyApp.of(context)= ThemeMode.light
                    //    ? ThemeMode.dark
                   //     : ThemeMode.light;
                  }),
-        Switch(
-          value: isSwitched,
-          onChanged: (value) {
-            setState(() {
-              print('value before switch');
-              print(Database().responsedarkorlight());
-              isSwitched = value;
-              print("value here");
-              print(value);
-              if (isSwitched == true) {
-               // MyApp.of(context)?.changeTheme(ThemeMode.dark);
-                ThemeModeHandler.of(context)?.saveThemeMode(ThemeMode.dark);
-             //   print(ThemeModeHandler
-              //      .of(context)
-              //      ?.themeMode);
-                Database().darkorlight(value);
-                print("database below");
-                print(Database().responsedarkorlight());
-              }
-              else {
-               // MyApp.of(context)?.changeTheme(ThemeMode.light);
-                ThemeModeHandler.of(context)?.saveThemeMode(ThemeMode.light);
-                print("database below");
 
-                Database().darkorlight(value);
-                print(Database().responsedarkorlight());
-              }
-            });
-          },
-         // activeThumbImage: AssetImage(
-             //  Icons.dark_mode
-        //     ),
-
-          inactiveThumbImage: new NetworkImage('http://wolfrosch.com/_img/works/goodies/icon/vim@2x'),
-          activeTrackColor: Colors.lightGreenAccent,
-          activeColor: Colors.green,
-        ),
       ]
       ),
 

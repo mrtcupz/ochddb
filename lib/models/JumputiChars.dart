@@ -16,7 +16,7 @@ class JumputiChars extends HiveObject{
   final String portrait;
 
   final String type;
-
+  final String title;
   final String classs;
 
   final String era;
@@ -28,7 +28,7 @@ class JumputiChars extends HiveObject{
 
 
   JumputiChars(
-      {required this.Transform,required this.maxrarity, required this.name, required this.series, required this.portrait, required this.type, required this.classs,required this.era, required this.method, required this.ID,required this.grade});
+      {required this.Transform,required this.maxrarity, required this.name, required this.series, required this.portrait, required this.type, required this.classs,required this.era, required this.method, required this.ID,required this.grade, required this.title});
 
   factory JumputiChars.fromJson(Map<dynamic, dynamic> parsedjson) {
     return JumputiChars(
@@ -38,6 +38,7 @@ class JumputiChars extends HiveObject{
         maxrarity: parsedjson['MaxRarity'],
         portrait: parsedjson['Portrait'],
         type: parsedjson['Type'],
+        title: parsedjson['Title'],
         classs: parsedjson['Class'],
         era: parsedjson['Era'],
         grade: parsedjson['Grade'],

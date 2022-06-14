@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -93,40 +94,97 @@ class _DetailPageLegendState extends State<DetailPageLegend> {
           ListView.builder(
           itemCount: _infomodel.length,
             itemBuilder: (context, i) {
+              final List<String> imgList = [
+                "https://ochd.co.uk/db/puti/Assets/Legend/art/"+_infomodel[i].id.substring(2)+".png",
+                "https://ochd.co.uk/db/puti/Assets/Legend/std/"+_infomodel[i].id.substring(2)+".png",
+
+              ];
+              final List<Widget> imageSliders = imgList
+                  .map((item) => Container(
+                child: Container(
+                  margin: EdgeInsets.all(5.0),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      child: Stack(
+                        children: <Widget>[
+                          Image.network(item, width: 1000.0, height: 1000,),
+                          Positioned(
+                            bottom: 0.0,
+                            left: 0.0,
+                            right: 0.0,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Color.fromARGB(200, 0, 0, 0),
+                                    Color.fromARGB(0, 0, 0, 0)
+                                  ],
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                ),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10.0, horizontal: 20.0),
+                              child: Text(
+                                imgList.indexOf(item) == 0 ? "Manga Panel 1": "Manga panel 2",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
+              ))
+                  .toList();
               return SingleChildScrollView(
                 child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 44),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Expanded(
-                              child: Image.network(
-                                "https://ochd.co.uk/db/puti/Assets/Legend/art/"+_infomodel[i].id.substring(2)+".png",
-                                height: 200,
-                                width: 300,
-                              ),
-                            ),
-                          ],
+                      Container(
+                        child: CarouselSlider(
+                          options: CarouselOptions(
+                            autoPlay: true,
+                            aspectRatio: 1,
+                            enlargeCenterPage: true,
+                            pauseAutoPlayOnManualNavigate: true,
+                          ),
+                          items: imageSliders,
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 44),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Expanded(
-                              child: Image.network(
-                                "https://ochd.co.uk/db/puti/Assets/Legend/std/"+_infomodel[i].id.substring(2)+".png",
-                                height: 200,
-                                width: 300,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 44),
+                      //   child: Row(
+                      //     mainAxisSize: MainAxisSize.max,
+                      //     children: [
+                      //       Expanded(
+                      //         child: Image.network(
+                      //           "https://ochd.co.uk/db/puti/Assets/Legend/art/"+_infomodel[i].id.substring(2)+".png",
+                      //           height: 200,
+                      //           width: 300,
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // Padding(
+                      //   padding: EdgeInsetsDirectional.fromSTEB(20, 12, 20, 44),
+                      //   child: Row(
+                      //     mainAxisSize: MainAxisSize.max,
+                      //     children: [
+                      //       Expanded(
+                      //         child: Image.network(
+                      //           "https://ochd.co.uk/db/puti/Assets/Legend/std/"+_infomodel[i].id.substring(2)+".png",
+                      //           height: 200,
+                      //           width: 300,
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                 Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
                 child: Row(

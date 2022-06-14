@@ -92,7 +92,17 @@ class _CardClickedwordpressState extends State<CardClickedwordpress> {
                       Widget html = Html(
                         data:
                         wppost['content']['rendered'],
+                          style: {
 
+                          "a": Style(
+                            alignment: Alignment.center
+                          ),
+                            "href": Style(
+                                alignment: Alignment.center
+                            ),
+
+
+                        }
 
                       );
                       print(html);

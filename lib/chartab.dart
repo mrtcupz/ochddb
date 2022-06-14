@@ -23,6 +23,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:filter_list/filter_list.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -62,7 +63,7 @@ final box = GetStorage().read("chars"); // list of maps gets stored here
 final boxlight = GetStorage().read("theme"); // list of maps gets stored here
 List<JumputiChars> _userDetails = [];
 List<JumputiChars> _searchResult = [];
-List<Titleseries> _fieldList = [];
+List<Titleseries> fieldList = [];
 final cart = LogProvider();
 
 
@@ -88,7 +89,7 @@ List _era = ["1970","1980","1990","2000","2010"];
 List _class = ["DPS","Balanced","Healer","Tank","Special"];
 
 List _grade = ["Event","Hero","Limited","Musou"];
-List _selectedseries = [];
+var _selectedseries = "";
 List _selectedera = [];
 List _selectedclass = [];
 List _selectedgrade = [];
@@ -127,6 +128,7 @@ class _ChartabState extends State<Chartab> with TickerProviderStateMixin {
   // COMPLETE: Add _isBannerAdReady
   bool _isBannerAdReady = false;
   bool isSwitched = Database().responsedarkorlight()?? false;
+  List<Titleseries>serieslist = [];
 
   myLoadAsset(String path, String id)  {
     int casetype = 0;
@@ -163,11 +165,12 @@ class _ChartabState extends State<Chartab> with TickerProviderStateMixin {
         print("map working");
       }
      // mylist = List.generate(10, (index) => _userDetails[index]);
+      fieldList = Database().responsedtitleseries();
 
     }
 
 
-     else {
+    else {
       print("storage empty");
     }
     // initializing list from storage
@@ -299,16 +302,37 @@ class _ChartabState extends State<Chartab> with TickerProviderStateMixin {
         Database().storePriceModel(_userDetails);
        // box.write('chars',_userDetails);
         print(jsonEncode(_userDetails[500]));
-
+        Database().clearTitlesries();
         checkifused = 1;
 
         print(_userDetails.length);
+        fieldList = fieldListData.toSet().toList();
+        Database().storetitleseries(fieldList);
 
+        // for (Map serie in responseJson){
+        //  fieldList.add(Titleseries.fromJsonnew(serie));
+      //  }
+    //    fieldList.forEach((element) {serieslist.add})
+       // fieldList.sort();
+     //   print("fieldlist below");
+      //  List serieslist = [];
+       // fieldList.forEach((v) => serieslist.add(v));
 
+        //  print(fieldList[0].series);
+     //   for (int i = 0; i <= fieldList.length; i++) {
+        //  serieslist.insert(i,);
+       // }
+        print("stinky ermewrmewrewrewrewrew");
+        print(fieldList[0].series);
+        print(fieldList[1].series);
 
+        print(fieldList[2].series);
 
+        print(fieldList[4].series);
 
-        _fieldList = fieldListData.toSet().toList();
+        print(fieldList[5].series);
+        //   print("series list below");
+      //  print(serieslist);
       }
 
 
@@ -357,27 +381,55 @@ class _ChartabState extends State<Chartab> with TickerProviderStateMixin {
                 itemBuilder: (context, u) {
 
                   return Card(
-                    color: u.method =="Limited Gacha" ? Colors.lightBlue: null,
-                    child: ListTile(
-                      contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                      title: Text(u.name),
-                      leading: CircleAvatar(
-                        radius: 30.0,
-                        backgroundColor: Colors.transparent,
-                        backgroundImage:
-                        myLoadAsset("assets/Badge/"+ u.ID + ".png",u.ID) ),
-                      subtitle: Text(u.classs),
-                      trailing: Image.asset(
-                        "assets/images/"+
-                            u.type! + ".png",),
 
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (
-                            context) => DetailPage(u.ID,u.Transform,u.portrait,u.name,u.maxrarity,u.series,u.type,u.classs,u.era,u.method)));
-                      },
+                    child: Container(
+
+                      decoration: BoxDecoration(
+
+                        gradient:u.method =="Limited Gacha" ?
+                      LinearGradient(
+
+                          colors:[
+                            Colors.yellow ,
+                            Colors.orangeAccent,
+                            Colors.yellow.shade300,
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ): u.method =="Musou Gacha"?
+
+                        LinearGradient(
+
+                          colors:[
+                            Colors.grey ,
+                            Colors.black54,
+                            Colors.black38,
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ): null
+                      ),
+                      child: ListTile(
+                        contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                        title: Text(u.name,style: TextStyle(color: u.method =="Limited Gacha"? Colors.black: u.method =="Musou Gacha" && ThemeMode.system == ThemeMode.dark? Colors.white: u.method =="Musou Gacha" && ThemeMode.system == ThemeMode.light? Colors.white:null)),
+                        leading: CircleAvatar(
+                          radius: 30.0,
+                          backgroundColor: Colors.transparent,
+                          backgroundImage:
+                          myLoadAsset("assets/Badge/"+ u.ID + ".png",u.ID) ),
+                        subtitle: Text(u.title.isNotEmpty ? u.title : u.classs,style: TextStyle(color: u.method =="Limited Gacha"? Colors.black: u.method =="Musou Gacha" && ThemeMode.system == ThemeMode.dark? Colors.white: u.method =="Musou Gacha" && ThemeMode.system == ThemeMode.light? Colors.white:null)),
+                        trailing: Image.asset(
+                          "assets/images/"+
+                              u.type! + ".png",),
+
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (
+                              context) => DetailPage(u.ID,u.Transform,u.portrait,u.name,u.maxrarity,u.series,u.type,u.classs,u.era,u.method)));
+                        },
 
 
+                      ),
                     ),
                     //  margin:
                     // const EdgeInsets.all(0.0),
@@ -407,31 +459,55 @@ class _ChartabState extends State<Chartab> with TickerProviderStateMixin {
                               return CircularProgressIndicator();
                             }
                             return Card(
-                              color: i.method == 'Limited Gacha'
-                                  ? Colors.lightBlue
-                                  : null,
+                              child: Container(
 
-                              child: ListTile(
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 20.0, vertical: 10.0),
-                                leading: CircleAvatar(
-                                    radius: 30.0,
-                                    backgroundColor: Colors.transparent,
-                                    backgroundImage: myLoadAsset(
-                                        "assets/Badge/" + i.ID + ".png", i.ID)),
-                                title: Text(i.name),
-                                subtitle: Text(i.classs),
-                                trailing: Image.asset(
-                                  "assets/images/" + i.type! + ".png",
+                                decoration: BoxDecoration(
+
+                                    gradient:i.method =="Limited Gacha" ?
+                                    LinearGradient(
+
+                                      colors:[
+                                        Colors.yellow ,
+                                        Colors.orangeAccent,
+                                        Colors.yellow.shade300,
+                                      ],
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                    ): i.method =="Musou Gacha"?
+
+                                    LinearGradient(
+
+                                      colors:[
+                                        Colors.grey ,
+                                        Colors.black54,
+                                        Colors.black38,
+                                      ],
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                    ): null
                                 ),
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              DetailPage(i.ID,i.Transform,i.portrait,i.name,i.maxrarity,i.series,i.type,i.classs,i.era,i.method)));
+                                child: ListTile(
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0, vertical: 10.0),
+                                  leading: CircleAvatar(
+                                      radius: 30.0,
+                                      backgroundColor: Colors.transparent,
+                                      backgroundImage: myLoadAsset(
+                                          "assets/Badge/" + i.ID + ".png", i.ID)),
+                                  title: Text(i.name,style: TextStyle(color: i.method =="Limited Gacha"? Colors.black: i.method =="Musou Gacha" && ThemeMode.system == ThemeMode.dark? Colors.white: i.method =="Musou Gacha" && ThemeMode.system == ThemeMode.light? Colors.white:null),),
+                                  subtitle: Text(i.title.isNotEmpty ? i.title: i.classs,style: TextStyle(color: i.method =="Limited Gacha"? Colors.black: i.method =="Musou Gacha" && ThemeMode.system == ThemeMode.dark? Colors.white: i.method =="Musou Gacha" && ThemeMode.system == ThemeMode.light? Colors.white:null)),
+                                  trailing: Image.asset(
+                                    "assets/images/" + i.type! + ".png",
+                                  ),
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                DetailPage(i.ID,i.Transform,i.portrait,i.name,i.maxrarity,i.series,i.type,i.classs,i.era,i.method)));
 
-                                },
+                                  },
+                                ),
                               ),
                               // margin: const EdgeInsets.all(0.0),
                             );
@@ -441,28 +517,30 @@ class _ChartabState extends State<Chartab> with TickerProviderStateMixin {
                   child: ListView.separated(
               itemBuilder: (context, index) {
                 return Card(
-                  color: selectedUserList![index].method =="Limited Gacha" ? Colors.yellow : null,
-                  child: ListTile(
-                    contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                    leading: CircleAvatar(
-                      radius: 30.0,
-                      backgroundColor: Colors.transparent,
-                      backgroundImage:
-                      myLoadAsset("assets/Badge/"+ selectedUserList![index].ID + ".png",selectedUserList![index].ID)),
+                  child: Container(
 
-                    title: Text(selectedUserList![index].name),
-                    subtitle: Text(selectedUserList![index].classs),
-                    trailing: Image.asset(
-                      "assets/images/"+
-                          selectedUserList![index].type! + ".png",),
+                    child: ListTile(
+                      contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                      leading: CircleAvatar(
+                        radius: 30.0,
+                        backgroundColor: Colors.transparent,
+                        backgroundImage:
+                        myLoadAsset("assets/Badge/"+ selectedUserList![index].ID + ".png",selectedUserList![index].ID)),
 
-                    onTap: () {
+                      title: Text(selectedUserList![index].name),
+                      subtitle: Text(selectedUserList![index].title),
+                      trailing: Image.asset(
+                        "assets/images/"+
+                            selectedUserList![index].type! + ".png",),
 
-                      Navigator.push(context, MaterialPageRoute(builder: (
-                          context) => DetailPage(selectedUserList![index].ID,selectedUserList![index].Transform,selectedUserList![index].portrait,selectedUserList![index].name,selectedUserList![index].maxrarity,selectedUserList![index].series,selectedUserList![index].type,selectedUserList![index].classs,selectedUserList![index].era,selectedUserList![index].method )));
-                    },
+                      onTap: () {
 
+                        Navigator.push(context, MaterialPageRoute(builder: (
+                            context) => DetailPage(selectedUserList![index].ID,selectedUserList![index].Transform,selectedUserList![index].portrait,selectedUserList![index].name,selectedUserList![index].maxrarity,selectedUserList![index].series,selectedUserList![index].type,selectedUserList![index].classs,selectedUserList![index].era,selectedUserList![index].method )));
+                      },
+
+                    ),
                   ),
                   //  margin:
                   // const EdgeInsets.all(0.0),
@@ -502,7 +580,7 @@ class _ChartabState extends State<Chartab> with TickerProviderStateMixin {
 
                     content: YourBottomSheetWidget(
 
-                     // //_fieldList,
+                      fieldlist: fieldList.toSet().toList(),
                       onSelectionChanged: (selectedList) {
                         _multiFilterRankChipState();
                       },
@@ -530,7 +608,7 @@ class _ChartabState extends State<Chartab> with TickerProviderStateMixin {
                                     selectedChoicesType.clear();
                                     _selectedtype.clear();
                                     _selectedtype.clear();
-                                    _selectedseries.clear();
+                                    _selectedseries = "";
                                     _selectedera.clear();
                                     _selectedclass.clear();
                                     _selectedgrade.clear();
@@ -594,7 +672,7 @@ class _ChartabState extends State<Chartab> with TickerProviderStateMixin {
       selectedChoicesType.clear();
       _selectedtype.clear();
       _selectedtype.clear();
-      _selectedseries.clear();
+      _selectedseries = "";
       _selectedera.clear();
       _selectedclass.clear();
       _selectedgrade.clear();
@@ -610,12 +688,16 @@ class _ChartabState extends State<Chartab> with TickerProviderStateMixin {
       setState(() {
         _searchResult.clear();
         print("filteed length original");
-
+        if( Database().responsereadSeries() != null) {
+          _selectedseries = Database().responsereadSeries();
+          print("series not empty");
+        }
         //    List _selectedtype = cart.getTypeList();
         if( Database().responsereadType() != null) {
           _selectedtype = Database().responsereadType();
           print("type not empty");
         }
+
         if( Database().responsereadEra() != null) {
           _selectedera = Database().responsereadEra();
           print("era not empty");
@@ -646,20 +728,18 @@ class _ChartabState extends State<Chartab> with TickerProviderStateMixin {
         print(_selectedclass);
 
 
-        int casetype = 0;
 
-        if (_selectedseries.isNotEmpty & _selectedtype.isNotEmpty){
-          casetype = 1;
-        }
-
-        if (_selectedseries.isNotEmpty & _selectedtype.isEmpty){
-          casetype = 2;
-        }
-        if (_selectedtype.isNotEmpty & _selectedseries.isEmpty) {
-          casetype = 3;
-        }
         print("filtered below");
         List<JumputiChars> filteredList = List.from(_userDetails);
+        if (_selectedseries.isNotEmpty) {
+          // remove every element that does not satisfy the condition
+          filteredList.removeWhere((element) => !_selectedseries.contains(element.series));
+          print(_selectedclass);
+          print("filtered seeeeerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+          print(filteredList.length);
+          Database().clearseries();
+
+        }
         if (_selectedclass.isNotEmpty) {
           // remove every element that does not satisfy the condition
           filteredList.removeWhere((element) => !_selectedclass.contains(element.classs));

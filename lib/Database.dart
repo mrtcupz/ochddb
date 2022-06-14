@@ -36,6 +36,21 @@ class Database extends GetxController {
     print(box.read("Type"));
     print("response type added");
   }
+  responseSeries(String value) {
+    box.write('series', value);
+    print("response type added");
+  }
+  responsereadSeries() {
+    final _return =box.read('series');
+    return _return;
+  }
+  responsedtitleseries() {
+    final _return =box.read('title');
+    return _return;
+  }
+  storetitleseries(title) {
+    box.write('title', title);
+  }
   responseTypeLegend(value) {
     print("4skin");
     print(value);
@@ -74,6 +89,12 @@ class Database extends GetxController {
   }
   clearClass() {
     box.remove("Class");
+  }
+  clearTitlesries() {
+    box.remove("title");
+  }
+  clearseries() {
+    box.remove("series");
   }
   responsereadTypelegend() {
     print("5skin");

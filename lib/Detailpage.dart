@@ -4,6 +4,7 @@ import 'dart:developer';
 
 
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -209,6 +210,7 @@ List<CharINFOBuddy>_infobuddy = [];
   late String transformurl = "https://ochd.co.uk/db/puti/Assets/book/bt_chara_book_"+passedData+".png";
   late BannerAd _bannerAd;
   bool isSwitched = Database().responsedarkorlight()?? false;
+
 
   // TODO: Add _isBannerAdReady
   bool _isBannerAdReady = false;
@@ -485,54 +487,111 @@ List<CharINFOBuddy>_infobuddy = [];
     //   List<String> personsEncoded = JumputiChars.map((person) => jsonEncode(person.toJson())).toList();
     // await sharedPreferences.setStringList('accounts', accounts);
   }
-  Widget checktransfrom(){
-    if(passedtransform == "1"){
 
+  Widget checktransfrom(){
+    final List<String> imgList = [
+      imageurl,
+      "https://ochd.co.uk/db/puti/Assets/book/bt_chara_book_"+passedData+".png",
+      "https://ochd.co.uk/db/puti/Assets/Art/"+passedportrait,
+    ];
+    if(passedtransform == "1"){
+      final List<Widget> imageSliders = imgList
+          .map((item) => Container(
+        child: Container(
+          margin: EdgeInsets.all(5.0),
+          child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              child: Stack(
+                children: <Widget>[
+                  Image.network(item, width: 1000.0, height: 1000,),
+                  Positioned(
+                    bottom: 0.0,
+                    left: 0.0,
+                    right: 0.0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Color.fromARGB(200, 0, 0, 0),
+                            Color.fromARGB(0, 0, 0, 0)
+                          ],
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                        ),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 20.0),
+                      child: Text(
+                        imgList.indexOf(item) == 0 ? "Sprite ": imgList.indexOf(item) == 1 ? "Manga": "Portrait",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )),
+        ),
+      ))
+          .toList();
       return SingleChildScrollView(
           child:SafeArea(
 
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-
-                          Image.network(
-                            imageurl,
-                            height: 150,
-                            width: 150,),
-
-                          ],
-                      )
+                  Container(
+                    child: CarouselSlider(
+                      options: CarouselOptions(
+                        autoPlay: true,
+                        aspectRatio: 1,
+                        enlargeCenterPage: true,
+                        pauseAutoPlayOnManualNavigate: true,
+                      ),
+                      items: imageSliders,
+                    ),
                   ),
-                  Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.network("https://ochd.co.uk/db/puti/Assets/book/bt_chara_book_"+passedData+".png",
-                            height: 150,
-                            width: 150,),
-                        ],
-                      )
-                  ),
-                  Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.network("https://ochd.co.uk/db/puti/Assets/Art/"+passedportrait,
-                            height: 150,
-                            width: 150,),
-                        ],
-                      )
-                  ),
+                  // Padding(
+                  //     padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                  //     child: Row(
+                  //       mainAxisSize: MainAxisSize.max,
+                  //       mainAxisAlignment: MainAxisAlignment.center,
+                  //       children: [
+                  //
+                  //         Image.network(
+                  //           imageurl,
+                  //           height: 150,
+                  //           width: 150,),
+                  //
+                  //         ],
+                  //     )
+                  // ),
+                  // Padding(
+                  //     padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                  //     child: Row(
+                  //       mainAxisSize: MainAxisSize.max,
+                  //       mainAxisAlignment: MainAxisAlignment.center,
+                  //       children: [
+                  //         Image.network("https://ochd.co.uk/db/puti/Assets/book/bt_chara_book_"+passedData+".png",
+                  //           height: 150,
+                  //           width: 150,),
+                  //       ],
+                  //     )
+                  // ),
+                  // Padding(
+                  //     padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                  //     child: Row(
+                  //       mainAxisSize: MainAxisSize.max,
+                  //       mainAxisAlignment: MainAxisAlignment.center,
+                  //       children: [
+                  //         Image.network("https://ochd.co.uk/db/puti/Assets/Art/"+passedportrait,
+                  //           height: 150,
+                  //           width: 150,),
+                  //       ],
+                  //     )
+                  // ),
 
                   Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
@@ -629,6 +688,39 @@ List<CharINFOBuddy>_infobuddy = [];
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          Image.asset(
+                            "assets/detail/hp.png",
+                            height: 50,
+                            width: 50,
+                          ),
+                          Text(
+                              statsHP
+                          ),
+                          Image.asset(
+                            "assets/detail/atk.png",
+                            height: 50,
+                            width: 50,
+                          ),
+                          Text(
+                              statsAtk
+                          ),
+                          Image.asset(
+                            "assets/detail/rcv.png",
+                            height: 50,
+                            width: 50,
+                          ),
+                          Text(
+                              statsDef
+                          ),
+                        ],
+                      )
+                  ),
+                  Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
     Expanded(child:Text("This unit can switch between forms. Click the button in game to switch")),
 
 
@@ -638,6 +730,7 @@ List<CharINFOBuddy>_infobuddy = [];
 
                         ],
                       )),
+
                   Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -748,18 +841,17 @@ List<CharINFOBuddy>_infobuddy = [];
                           ],
                         )),
                     Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                        padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 20),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
 
-                            const Text(
-                                'Skillname: ',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)
+                             Text(
+                                TransformSkillName,textAlign: TextAlign.center,style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)
 
                             ),
 
-                            Expanded(child: Text(TransformSkillName)),
 
 
                           ],
@@ -953,18 +1045,17 @@ List<CharINFOBuddy>_infobuddy = [];
                           ],
                         )),
                     Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                        padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 20),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
 
-                            const Text(
-                                'Skillname: ',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)
+                            Text(
+                                TransformSkillNamebuddy,textAlign: TextAlign.center,style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)
 
                             ),
 
-                            Expanded(child: Text(TransformSkillNamebuddy)),
 
 
                           ],
@@ -1158,18 +1249,15 @@ List<CharINFOBuddy>_infobuddy = [];
                           ],
                         )),
                     Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                        padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 20),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
-                                'Skillname: ',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)
+                             Text(
+                                TransformSkillNamepassive,textAlign: TextAlign.center,style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)
 
                             ),
-
-
-                            Expanded(child: Text(TransformSkillNamepassive)),
 
 
                           ],
@@ -1367,18 +1455,18 @@ List<CharINFOBuddy>_infobuddy = [];
                           ],
                         )),
                     Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                        padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 20),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
 
-                            const Text(
-                                'Skillname: ',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)
+                             Text(
+                                TransformSkillName,textAlign: TextAlign.center,style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)
 
                             ),
 
-                            Expanded(child: Text(TransformSkillName)),
+
 
 
                           ],
@@ -1571,18 +1659,17 @@ List<CharINFOBuddy>_infobuddy = [];
                           ],
                         )),
                     Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                        padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 20),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
 
-                            const Text(
-                                'Skillname: ',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)
+                            Text(
+                                TransformSkillNamebuddy,textAlign: TextAlign.center,style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)
 
                             ),
 
-                            Expanded(child: Text(TransformSkillNamebuddy)),
 
 
                           ],
@@ -1776,18 +1863,18 @@ List<CharINFOBuddy>_infobuddy = [];
                           ],
                         )),
                     Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                        padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 20),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
 
-                            const Text(
-                                'Skillname: ',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)
+                             Text(
+                          TransformSkillNamepassive,textAlign: TextAlign.center,style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)
 
                             ),
 
-                            Expanded(child: Text(TransformSkillNamepassive)),
+
 
 
                           ],
@@ -1977,47 +2064,99 @@ List<CharINFOBuddy>_infobuddy = [];
     }
 
     else if (passedtransform == "0"){
+      final List<Widget> imageSliders = imgList
+          .map((item) => Container(
+        child: Container(
+          margin: EdgeInsets.all(5.0),
+          child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              child: Stack(
+                children: <Widget>[
+                  Image.network(item, width: 1000.0, height: 1000,),
+                  Positioned(
+                    bottom: 0.0,
+                    left: 0.0,
+                    right: 0.0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Color.fromARGB(200, 0, 0, 0),
+                            Color.fromARGB(0, 0, 0, 0)
+                          ],
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                        ),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 20.0),
+                      child: Text(
+                        imgList.indexOf(item) == 0 ? "Sprite ": imgList.indexOf(item) == 1 ? "Manga": "Portrait",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )),
+        ),
+      ))
+          .toList();
       return SingleChildScrollView(
 
           child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.network("https://ochd.co.uk/db/puti/Assets/std/bt_chara_std_"+passedData+".png",
-                          height: 150,
-                          width: 150,),
-                      ],
-                    )
+                Container(
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      autoPlay: true,
+                      aspectRatio: 1,
+                      enlargeCenterPage: true,
+                      pauseAutoPlayOnManualNavigate: true,
+                    ),
+                    items: imageSliders,
+                  ),
                 ),
-                Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.network("https://ochd.co.uk/db/puti/Assets/book/bt_chara_book_"+passedData+".png",
-                          height: 150,
-                          width: 150,),
-                      ],
-                    )
-                ),
-                Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.network("https://ochd.co.uk/db/puti/Assets/Art/"+passedportrait,
-                          height: 150,
-                          width: 150,),
-                      ],
-                    )
-                ),
+                // Padding(
+                //     padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                //     child: Row(
+                //       mainAxisSize: MainAxisSize.max,
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         Image.network("https://ochd.co.uk/db/puti/Assets/std/bt_chara_std_"+passedData+".png",
+                //           height: 150,
+                //           width: 150,),
+                //       ],
+                //     )
+                // ),
+                // Padding(
+                //     padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                //     child: Row(
+                //       mainAxisSize: MainAxisSize.max,
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         Image.network("https://ochd.co.uk/db/puti/Assets/book/bt_chara_book_"+passedData+".png",
+                //           height: 150,
+                //           width: 150,),
+                //       ],
+                //     )
+                // ),
+                // Padding(
+                //     padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                //     child: Row(
+                //       mainAxisSize: MainAxisSize.max,
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         Image.network("https://ochd.co.uk/db/puti/Assets/Art/"+passedportrait,
+                //           height: 150,
+                //           width: 150,),
+                //       ],
+                //     )
+                // ),
 
                 Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
@@ -2115,11 +2254,29 @@ List<CharINFOBuddy>_infobuddy = [];
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset(
-                          "assets/detail/UltimateAttack.png",
-                          height: 100,
-                          width: 300,
+                          "assets/detail/hp.png",
+                          height: 50,
+                          width: 50,
                         ),
-
+                        Text(
+                            statsHP
+                        ),
+                        Image.asset(
+                          "assets/detail/atk.png",
+                          height: 50,
+                          width: 50,
+                        ),
+                        Text(
+                            statsAtk
+                        ),
+                        Image.asset(
+                          "assets/detail/rcv.png",
+                          height: 50,
+                          width: 50,
+                        ),
+                        Text(
+                            statsDef
+                        ),
                       ],
                     )
                 ),
@@ -2129,8 +2286,22 @@ List<CharINFOBuddy>_infobuddy = [];
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Skillname: ',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)),
-                        Expanded(child: Text(skillname))
+                        Image.asset(
+                          "assets/detail/UltimateAttack.png",
+                          height: 100,
+                          width: 300,
+                        ),
+
+                      ],
+                    )
+                ),
+                Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 20),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(skillname,textAlign: TextAlign.center,style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)),
 
 
                       ],
@@ -2325,39 +2496,7 @@ List<CharINFOBuddy>_infobuddy = [];
                       ],
                     )),
 
-            Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/detail/hp.png",
-                          height: 50,
-                          width: 50,
-                        ),
-                        Text(
-                            statsHP
-                        ),
-                        Image.asset(
-                          "assets/detail/atk.png",
-                          height: 50,
-                          width: 50,
-                        ),
-                        Text(
-                            statsAtk
-                        ),
-                        Image.asset(
-                          "assets/detail/rcv.png",
-                          height: 50,
-                          width: 50,
-                        ),
-                        Text(
-                            statsDef
-                        ),
-                      ],
-                    )
-                ),
+
                 if(buddyskill.isNotEmpty)...[
                   Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
@@ -2375,20 +2514,16 @@ List<CharINFOBuddy>_infobuddy = [];
                       )
                   ),
                   Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                      padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 20),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text(
-                              'Skillname: ',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)
+                          Text(
+                              buddyskillname,textAlign: TextAlign.center,style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)
 
                           ),
 
-
-
-
-                          Expanded(child: Text(buddyskillname)),
 
 
                         ],
@@ -2603,19 +2738,18 @@ List<CharINFOBuddy>_infobuddy = [];
                       )
                   ),
                   Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                      padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 20),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
 
-                          const Text(
-                              'Skillname: ',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)
+                          Text(
+                        passiveskillname,textAlign: TextAlign.center,style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)
 
                           ),
 
 
-                          Expanded(child: Text(passiveskillname)),
 
 
                         ],
@@ -2968,6 +3102,10 @@ List<CharINFOBuddy>_infobuddy = [];
       getCharDetailsluck();
       getCharDetailspassive();
       getCharDetailsskills();
+    }
+    else if(passedtransform == "1"){
+      getCharDetailsstats();
+
     }
     _bannerAd = BannerAd(
       adUnitId: AdHelper.bannerAdUnitId,

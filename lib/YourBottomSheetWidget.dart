@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:ochdappupdated/chartab.dart';
 import 'package:ochdappupdated/models/Titleseries.dart';
 import 'package:provider/provider.dart';
+import 'package:theme_mode_handler/theme_mode_handler.dart';
+
 import 'Database.dart';
 import 'LogProvider.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -21,14 +23,15 @@ class TypeModel {
 }
 
 class YourBottomSheetWidget extends StatefulWidget {
-  // final List<Titleseries> _fieldlist;
+   final List<Titleseries> fieldlist;
 
 
   late final Function(List<String>)? onSelectionChanged;
   late final Function(List<String>)? onMaxSelected;
-  YourBottomSheetWidget( {this.onSelectionChanged, this.onMaxSelected});
+
+  YourBottomSheetWidget( {this.onSelectionChanged, this.onMaxSelected, required this.fieldlist,});
   @override
-  _YourBottomSheetWidgetState createState() => _YourBottomSheetWidgetState();
+  _YourBottomSheetWidgetState createState() => _YourBottomSheetWidgetState(this.fieldlist);
 }
 
 class _YourBottomSheetWidgetState extends State<YourBottomSheetWidget> {
@@ -43,6 +46,8 @@ class _YourBottomSheetWidgetState extends State<YourBottomSheetWidget> {
 
   ];
   final List<String> _filters = <String>[];
+  //late final List<Titleseries> fieldlist;
+
   final _items = _typemodel
       .map((type) => MultiSelectItem<TypeModel>(type, type.type))
       .toList();
@@ -54,75 +59,28 @@ class _YourBottomSheetWidgetState extends State<YourBottomSheetWidget> {
   final List _era = ["1970","1980","1990","2000","2010"];
   final List _class = ["DPS","Balanced","Healer","Tank","Special"];
   // final cart = LogProvider();
-  List _selectedseries = [];
+   var _selectedseries = "";
   List _selectedera = [];
   List _selectedclass = [];
   List _selectedgrade = [];
   List _selectedtype = [];
+  bool mode = false;
+
+  _YourBottomSheetWidgetState(var fieldlist);
+  String dropdownvalue = fieldList[0].series;
 
   @override
   Widget build(BuildContext context) {
     //   super.build(context);
-
+    print("transfer");
+    print(fieldList[0].series);
+    print(fieldList[1].series);
     return SingleChildScrollView(
 
         child:
-
-
         Column(mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
 
-    //           Padding(
-    //           padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
-    //           child: Wrap(
-    //             children: <Widget>[
-    //               MultiSelectDialogField(
-    //                 items: _items,
-    //                 title: const Text("Type"),
-    //                 selectedColor: Colors.blue,
-    //                 decoration: BoxDecoration(
-    //                   color: Colors.blue.withOpacity(0.1),
-    //                   borderRadius: BorderRadius.all(Radius.circular(40)),
-    //                   border: Border.all(
-    //                     color: Colors.blue,
-    //                     width: 2,
-    //                   ),
-    //                 ),
-    //
-    //                 buttonText: Text(
-    //                   "Type",
-    //                   style: TextStyle(
-    //                     color: Colors.blue[800],
-    //                     fontSize: 16,
-    //                   ),
-    //                 ),
-    //                 onConfirm: (results) {
-    //                   _selectedAnimals2 = results;
-    //                   print(_selectedAnimals2);
-    //                   setState(() {
-    //
-    //                   print("cart added");
-    //
-    //                   _selectedtype = selectedChoicesType;
-    //                   String newresults = _selectedAnimals2;
-    //                   print(_selectedtype.toString());
-    //
-    //                   selectedChoicesType.contains(results)
-    //                   ? selectedChoicesType.remove(results)
-    //                       : selectedChoicesType.add(results);
-    //                   widget.onSelectionChanged?.call(selectedChoicesType);
-    //                 },
-    // );},
-    //                 chipDisplay: MultiSelectChipDisplay(
-    //                   onTap: (value) {
-    //                     setState(() {
-    //                       _selectedAnimals2.remove(value);
-    //                     });
-    //                   },
-    //                 ),
-    //               )
-    //             ],
-    //           )),
           Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
                   child: Wrap(
@@ -187,7 +145,52 @@ class _YourBottomSheetWidgetState extends State<YourBottomSheetWidget> {
                       ..._buildchoicegrade(),
                     ],
                   )),
+              Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                  child: Wrap(
 
+                    children: <Widget>[
+                      _titleContainer("Series"),
+                    ],
+                  )),
+              Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                  child: Wrap(
+                    children: [
+                      DropdownButton<String>(
+                        // Initial Value
+                        value: dropdownvalue,
+
+                        // Down Arrow Icon
+                        icon: Icon(Icons.keyboard_arrow_down),
+
+                        // Array list of items
+                        items: fieldList.map((items) {
+                          return DropdownMenuItem(
+                            value: items.series,
+                            child: new SizedBox(width: 200.0, child: new Text(items.series)),
+                          );
+                        }).toList(),
+                        // After selecting the desired option,it will
+                        // change button value to selected value
+                        onChanged: (newValue) {
+                          setState(() {
+                            dropdownvalue = newValue!;
+                            _selectedseries = dropdownvalue;
+                            Database().responseSeries(_selectedseries);
+                            print(_selectedseries.toString());
+                            selectedChoicesSeries.contains(newValue)
+                                ? selectedChoicesSeries.remove(newValue)
+                                : selectedChoicesSeries.add(newValue);
+                            widget.onSelectionChanged?.call(selectedChoicesSeries);
+                          });
+                        },
+                        //   // After selecting the desired option,it will
+                        //   // change button value to selected value
+                        //
+                      ),
+                    ],
+                  )),
 
             ])
 
@@ -196,12 +199,24 @@ class _YourBottomSheetWidgetState extends State<YourBottomSheetWidget> {
 
   _buildchoicetype() {
     List<Widget> choices = [];
+    bool mode = false;
 
+    if(ThemeModeHandler.of(context)?.themeMode == ThemeMode.light){
+      mode = false;
+    }
+    else if(ThemeModeHandler.of(context)?.themeMode == ThemeMode.dark){
+      mode = true;
+    }
     for (var item in _type) {
       choices.add(Container(
         padding: const EdgeInsets.all(2.0),
         child: FilterChip(
-          label: Text(item),
+          label: Text(item, style: TextStyle(
+            color: mode == false
+                ? Colors.white
+                : mode == true
+                ? Colors.black:Colors.black,
+          ),),
           selected: selectedChoicesType.contains(item),
           backgroundColor: Colors.red,
           selectedColor: Colors.blue,
@@ -237,12 +252,24 @@ class _YourBottomSheetWidgetState extends State<YourBottomSheetWidget> {
 
   _buildchoiceera() {
     List<Widget> choices = [];
+    bool mode = false;
 
+    if(ThemeModeHandler.of(context)?.themeMode == ThemeMode.light){
+      mode = false;
+    }
+    else if(ThemeModeHandler.of(context)?.themeMode == ThemeMode.dark){
+      mode = true;
+    }
     for (var item in _era) {
       choices.add(Container(
         padding: const EdgeInsets.all(2.0),
         child: FilterChip(
-          label: Text(item),
+          label: Text(item, style: TextStyle(
+            color: mode == false
+                ? Colors.white
+                : mode == true
+                ? Colors.black:Colors.black,
+          ),),
           selected: selectedChoicesEra.contains(item),
           backgroundColor: Colors.red,
           selectedColor: Colors.blue,
@@ -273,12 +300,24 @@ class _YourBottomSheetWidgetState extends State<YourBottomSheetWidget> {
 
   _buildchoiceclass() {
     List<Widget> choices = [];
+    bool mode = false;
 
+    if(ThemeModeHandler.of(context)?.themeMode == ThemeMode.light){
+      mode = false;
+    }
+    else if(ThemeModeHandler.of(context)?.themeMode == ThemeMode.dark){
+      mode = true;
+    }
     for (var item in _class) {
       choices.add(Container(
         padding: const EdgeInsets.all(2.0),
         child: FilterChip(
-          label: Text(item),
+          label: Text(item, style: TextStyle(
+            color: mode == false
+                ? Colors.white
+                : mode == true
+                ? Colors.black:Colors.black,
+          ),),
           selected: selectedChoicesClass.contains(item),
           backgroundColor: Colors.red,
           selectedColor: Colors.blue,
@@ -309,12 +348,24 @@ class _YourBottomSheetWidgetState extends State<YourBottomSheetWidget> {
 
   _buildchoicegrade() {
     List<Widget> choices = [];
+    bool mode = false;
 
+    if(ThemeModeHandler.of(context)?.themeMode == ThemeMode.light){
+      mode = false;
+    }
+    else if(ThemeModeHandler.of(context)?.themeMode == ThemeMode.dark){
+      mode = true;
+    }
     for (var item in _grade) {
       choices.add(Container(
         padding: const EdgeInsets.all(2.0),
         child: FilterChip(
-          label: Text(item),
+          label: Text(item, style: TextStyle(
+            color: mode == false
+                ? Colors.white
+                : mode == true
+                ? Colors.black:Colors.black,
+          ),),
           selected: selectedChoicesGrade.contains(item),
           backgroundColor: Colors.red,
           selectedColor: Colors.blue,
@@ -356,17 +407,27 @@ class _YourBottomSheetWidgetState extends State<YourBottomSheetWidget> {
       selectedChoicesType.clear();
       _selectedtype.clear();
       _selectedtype.clear();
-      _selectedseries.clear();
+    //  _selectedseries.clear();
       _selectedera.clear();
       _selectedclass.clear();
       _selectedgrade.clear();
     });
   }
+
   Widget _titleContainer(String myTitle) {
+    if(ThemeModeHandler.of(context)?.themeMode == ThemeMode.light){
+      mode = false;
+    }
+    else if(ThemeModeHandler.of(context)?.themeMode == ThemeMode.dark){
+      mode = true;
+    }
     return Text(
       myTitle,
-      style: const TextStyle(
-          color: Colors.black, fontSize: 24.0, fontWeight: FontWeight.bold),
+      style:  TextStyle(
+          color: mode == false
+              ? Colors.black
+              : mode == true
+              ? Colors.blue:Colors.blue, fontSize: 24.0, fontWeight: FontWeight.bold),
     );
   }
 
